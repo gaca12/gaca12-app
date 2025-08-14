@@ -1,4 +1,5 @@
 {
+  "id": "/gaca12-app/",
   "name": "Gaca12 APP",
   "short_name": "Gaca12 APP",
   "start_url": "/gaca12-app/index.html",
@@ -6,7 +7,7 @@
   "display": "standalone",
   "background_color": "#0f0f10",
   "theme_color": "#ff6a00",
-  "description": "App oficial de GACA 12 con YouTube, Twitch, TikTok, Discord, WhatsApp y Palaya’s Games.",
+  "description": "App oficial de GACA·12 con YouTube, Twitch, TikTok, Discord, WhatsApp y Palaya’s Games.",
   "icons": [
     {
       "src": "assets/icon-192x192.png",
