@@ -4,10 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GACA·12 — App</title>
+
+  <!-- Favicon (PNG recomendado). Si prefieres tu JPG, cambia la ruta a /gaca12-app/assets/logo.jpg -->
   <link rel="icon" href="/gaca12-app/assets/icon-192x192.png">
+
+  <!-- Estilos y manifest con rutas absolutas -->
   <link rel="stylesheet" href="/gaca12-app/styles.css" />
   <link rel="manifest" href="/gaca12-app/manifest.json">
+
+  <!-- PWA metas -->
   <meta name="theme-color" content="#ff6a00">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="apple-touch-icon" href="/gaca12-app/assets/icon-192x192.png">
@@ -52,10 +59,10 @@
     <section id="inicio" class="section active">
       <div class="hero card">
         <img src="/gaca12-app/assets/logo.jpg" alt="Logo GACA·12" class="hero-logo" />
-        <h2>¡Bienvenid@s a la app oficial de <span class="brand-accent">GACA·12</span>!</h2>
+        <h2>¡Bienvenid@s a la app oficial de <span class="brand-accent">GACA_12</span>!</h2>
         <p>
-          Abre el menú <strong>(☰ arriba a la izquierda)</strong> para navegar por las secciones.
-          Cuando elijas una sección, el menú se ocultará automáticamente para que veas solo el contenido.
+          Abre el menú para navegar por las secciones.
+          Gracias por usar mi aplicación.
         </p>
       </div>
       <div class="cards">
@@ -178,6 +185,7 @@
     </section>
   </main>
 
+  <!-- Scripts -->
   <script src="/gaca12-app/script.js"></script>
   <script>
   if ('serviceWorker' in navigator) {
