@@ -1,8 +1,8 @@
 {
   "name": "Gaca12 APP",
   "short_name": "Gaca12 APP",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/gaca12-app/index.html",
+  "scope": "/gaca12-app/",
   "display": "standalone",
   "background_color": "#0f0f10",
   "theme_color": "#ff6a00",

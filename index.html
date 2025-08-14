@@ -4,19 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GACA·12 — App</title>
-  <link rel="icon" href="assets/logo.jpg">
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="/gaca12-app/assets/logo.jpg">
+  <link rel="stylesheet" href="/gaca12-app/styles.css" />
+  <link rel="manifest" href="/gaca12-app/manifest.json">
   <meta name="theme-color" content="#ff6a00">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="assets/icon-192x192.png">
+  <link rel="apple-touch-icon" href="/gaca12-app/assets/icon-192x192.png">
 </head>
 <body>
   <!-- Sidebar / Drawer -->
   <aside id="drawer" class="drawer">
     <div class="drawer-header">
-      <img src="assets/logo.jpg" alt="GACA·12 logo" class="logo"/>
+      <img src="/gaca12-app/assets/logo.jpg" alt="GACA·12 logo" class="logo"/>
       <div>
         <h1 class="brand">GACA·12</h1>
         <p class="tag">App oficial</p>
@@ -51,7 +51,7 @@
     <!-- Inicio -->
     <section id="inicio" class="section active">
       <div class="hero card">
-        <img src="assets/logo.jpg" alt="Logo GACA·12" class="hero-logo" />
+        <img src="/gaca12-app/assets/logo.jpg" alt="Logo GACA·12" class="hero-logo" />
         <h2>¡Bienvenid@s a la app oficial de <span class="brand-accent">GACA·12</span>!</h2>
         <p>
           Abre el menú <strong>(☰ arriba a la izquierda)</strong> para navegar por las secciones.
@@ -178,11 +178,11 @@
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <script src="/gaca12-app/script.js"></script>
   <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+      navigator.serviceWorker.register('/gaca12-app/service-worker.js').catch(console.error);
     });
   }
   </script>
