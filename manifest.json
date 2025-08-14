@@ -1,7 +1,6 @@
 {
-  "id": "/gaca12-app/",
   "name": "Gaca12 APP",
-  "short_name": "Gaca12 APP",
+  "short_name": "Gaca12",
   "start_url": "/gaca12-app/index.html",
   "scope": "/gaca12-app/",
   "display": "standalone",
@@ -10,14 +9,15 @@
   "description": "App oficial de GACA·12 con YouTube, Twitch, TikTok, Discord, WhatsApp y Palaya’s Games.",
   "icons": [
     {
-      "src": "assets/icon-192x192.png",
+      "src": "/gaca12-app/assets/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "assets/icon-512x512.png",
+      "src": "/gaca12-app/assets/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+

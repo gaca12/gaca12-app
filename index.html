@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GACA·12 — App</title>
 
-  <!-- Favicon (PNG recomendado). Si prefieres tu JPG, cambia la ruta a /gaca12-app/assets/logo.jpg -->
+  <!-- Favicon -->
   <link rel="icon" href="/gaca12-app/assets/icon-192x192.png">
 
-  <!-- Estilos y manifest con rutas absolutas -->
+  <!-- Estilos y manifest -->
   <link rel="stylesheet" href="/gaca12-app/styles.css" />
   <link rel="manifest" href="/gaca12-app/manifest.json">
 
@@ -38,6 +38,8 @@
       <button class="nav-link" data-section="whatsapp">🟢 WhatsApp</button>
       <button class="nav-link" data-section="discord">💬 Discord</button>
       <button class="nav-link" data-section="palayas">🕹️ Palaya’s Games</button>
+      <!-- Botón para instalar la PWA -->
+      <button id="installBtn" class="nav-link">📥 Instalar App</button>
     </nav>
     <footer class="drawer-footer">© <span id="year"></span> GACA·12</footer>
   </aside>
@@ -50,7 +52,7 @@
     <div class="top-title">GACA·12</div>
   </header>
 
-  <!-- Overlay for mobile when drawer is open -->
+  <!-- Overlay -->
   <div id="overlay" class="overlay"></div>
 
   <!-- Main content -->
@@ -188,11 +190,31 @@
   <!-- Scripts -->
   <script src="/gaca12-app/script.js"></script>
   <script>
+  // Registro del Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/gaca12-app/service-worker.js').catch(console.error);
     });
   }
+
+  // Lógica del botón de instalación
+  let deferredPrompt;
+  const installBtn = document.getElementById('installBtn');
+  installBtn.style.display = 'none';
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = 'block';
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    installBtn.style.display = 'none';
+  });
   </script>
 </body>
 </html>
