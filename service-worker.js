@@ -1,5 +1,5 @@
-const CACHE_NAME = 'gaca12-app-v2';
-const ASSETS = [
+const CACHE_NAME = 'gaca12-app-v3';
+const STATIC_ASSETS = [
   '/gaca12-app/',
   '/gaca12-app/index.html',
   '/gaca12-app/styles.css',
@@ -10,54 +10,56 @@ const ASSETS = [
   '/gaca12-app/assets/icon-512x512.png'
 ];
 
-// Instalar y cachear recursos
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)).catch(() => {})
   );
   self.skipWaiting();
 });
 
-// Activar y limpiar cachés viejos
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
-      )
+      Promise.all(keys.map((k) => (k === CACHE_NAME ? null : caches.delete(k))))
     )
   );
   self.clients.claim();
 });
 
-// Estrategia: network-first para HTML, cache-first para estáticos
 self.addEventListener('fetch', (event) => {
-  const request = event.request;
+  const req = event.request;
+  const url = new URL(req.url);
 
-  // Si es navegación (HTML), intentar red
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request).catch(() => caches.match('/gaca12-app/index.html'))
-    );
+  // Navegación SPA
+  if (req.mode === 'navigate' && url.origin === location.origin) {
+    event.respondWith((async () => {
+      try {
+        const net = await fetch(req);
+        return net;
+      } catch {
+        const cached = await caches.match('/gaca12-app/index.html');
+        return cached || Response.error();
+      }
+    })());
     return;
   }
 
-  // Cache-first para recursos estáticos
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      return (
-        cached ||
-        fetch(request).then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-          return response;
-        })
-      );
-    })
-  );
-});
+  // Recursos del mismo origen
+  if (url.origin === location.origin) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const cached = await cache.match(req);
+      const fetchPromise = fetch(req).then((res) => {
+        if (res && res.status === 200 && (req.method === 'GET')) {
+          cache.put(req, res.clone());
+        }
+        return res;
+      }).catch(() => cached);
+      return cached || fetchPromise;
+    })());
+    return;
+  }
 
+  // Recursos externos
+  event.respondWith(fetch(req).catch(() => new Response('', { status: 502 })));
+});

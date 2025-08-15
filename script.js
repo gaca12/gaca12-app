@@ -1,4 +1,4 @@
-// Drawer (menú) y navegación entre secciones
+// Drawer y año
 const drawer = document.getElementById('drawer');
 const overlay = document.getElementById('overlay');
 const burger = document.getElementById('hamburger');
@@ -26,44 +26,48 @@ const links = Array.from(document.querySelectorAll('.nav-link'));
 const sections = Array.from(document.querySelectorAll('.section'));
 
 function showSection(id){
-  sections.forEach(s => s.classList.toggle('active', s.id === id));
+  sections.forEach(s => {
+    const active = (s.id === id);
+    s.classList.toggle('active', active);
+    s.style.display = active ? '' : 'none'; // Evitar blanco en PWA
+  });
   links.forEach(l => l.classList.toggle('active', l.dataset.section === id));
   if (window.innerWidth < 1024) closeDrawer();
-  history.replaceState(null, '', `#${id}`);
+  if (location.hash !== `#${id}`) location.hash = id;
 }
 
+// Click en links
 links.forEach(btn => btn.addEventListener('click', () => showSection(btn.dataset.section)));
 
+// Detectar hash inicial
 const initial = location.hash?.replace('#','') || 'inicio';
 showSection(initial);
 
-// Detectar cambio de hash (PWA y navegación manual)
+// Cambios de hash (PWA incluida)
 window.addEventListener('hashchange', () => {
-  const sectionId = location.hash?.replace('#','') || 'inicio';
-  showSection(sectionId);
+  const id = location.hash.replace('#','') || 'inicio';
+  showSection(id);
 });
 
-// Accesibilidad
+// Esc para cerrar menú
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
 });
 
-// Botón de instalación PWA
+// Botón instalar PWA
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-
   const installBtn = document.createElement('button');
-  installBtn.textContent = '📥 Instalar App';
-  installBtn.classList.add('btn', 'install-btn');
-  document.querySelector('.drawer-footer').appendChild(installBtn);
-
+  installBtn.textContent = '📲 Instalar app';
+  installBtn.className = 'btn install-btn';
+  document.querySelector('.nav').appendChild(installBtn);
   installBtn.addEventListener('click', async () => {
-    installBtn.remove();
     deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    const choice = await deferredPrompt.userChoice;
     deferredPrompt = null;
-    console.log(`Instalación: ${outcome}`);
+    installBtn.remove();
   });
 });
+
