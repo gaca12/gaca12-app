@@ -1,4 +1,4 @@
-// Drawer y año
+// Drawer (menú) y navegación entre secciones
 const drawer = document.getElementById('drawer');
 const overlay = document.getElementById('overlay');
 const burger = document.getElementById('hamburger');
@@ -26,48 +26,51 @@ const links = Array.from(document.querySelectorAll('.nav-link'));
 const sections = Array.from(document.querySelectorAll('.section'));
 
 function showSection(id){
-  sections.forEach(s => {
-    const active = (s.id === id);
-    s.classList.toggle('active', active);
-    s.style.display = active ? '' : 'none'; // Evitar blanco en PWA
-  });
+  sections.forEach(s => s.classList.toggle('active', s.id === id));
   links.forEach(l => l.classList.toggle('active', l.dataset.section === id));
+  // Cerrar menú en pantallas pequeñas
   if (window.innerWidth < 1024) closeDrawer();
-  if (location.hash !== `#${id}`) location.hash = id;
+  // Actualizar hash en la URL
+  history.replaceState(null, '', `#${id}`);
 }
 
-// Click en links
 links.forEach(btn => btn.addEventListener('click', () => showSection(btn.dataset.section)));
 
-// Detectar hash inicial
+// Iniciar según hash o "inicio"
 const initial = location.hash?.replace('#','') || 'inicio';
 showSection(initial);
 
-// Cambios de hash (PWA incluida)
-window.addEventListener('hashchange', () => {
-  const id = location.hash.replace('#','') || 'inicio';
-  showSection(id);
-});
-
-// Esc para cerrar menú
+// Accesibilidad: cerrar con ESC
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
 });
 
-// Botón instalar PWA
+
+// =======================
+// Botón Instalar en Android
+// =======================
 let deferredPrompt;
+const installBtn = document.getElementById('install-btn'); // Debe existir en el HTML
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  const installBtn = document.createElement('button');
-  installBtn.textContent = '📲 Instalar app';
-  installBtn.className = 'btn install-btn';
-  document.querySelector('.nav').appendChild(installBtn);
-  installBtn.addEventListener('click', async () => {
-    deferredPrompt.prompt();
-    const choice = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    installBtn.remove();
-  });
+  if (installBtn) installBtn.style.display = 'block';
 });
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('✅ App instalada');
+      } else {
+        console.log('❌ Instalación cancelada');
+      }
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    }
+  });
+}
 
